@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Register | Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+
+    <div class="auth-icon">✨</div>
+
+    <h1>Create Account</h1>
+    <p class="subtitle">
+        Join us and start managing your money smarter.
+    </p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="notice">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="field">
+
+                <label for="{{ field.id_for_label }}">
+                    {% if field.name == 'username' %}
+                        Username
+                    {% elif field.name == 'email' %}
+                        Email Address
+                    {% elif field.name == 'password1' %}
+                        Password
+                    {% elif field.name == 'password2' %}
+                        Confirm Password
+                    {% else %}
+                        {{ field.label }}
+                    {% endif %}
+                </label>
+
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small class="helptext">
+                        {{ field.help_text|safe }}
+                    </small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <p style="color:#d62839;font-size:13px;">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+
+            </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            <div class="notice">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <button type="submit" class="primary-btn">
+            Create Account →
+        </button>
+    </form>
+
+    <p class="auth-bottom">
+        Already have an account?
+        <a href="{% url 'login' %}">Login here</a>
+    </p>
+
+</div>
+{% endblock %}
